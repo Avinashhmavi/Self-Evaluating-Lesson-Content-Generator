@@ -1,0 +1,11 @@
+langgraph
+langchain-google-genai
+langchain-openai
+textstat
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+pytest
+httpx
+python-docx

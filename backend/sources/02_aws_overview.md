@@ -1,0 +1,5 @@
+# Source 2: AWS, "What is Retrieval-Augmented Generation?" (aws.amazon.com/what-is/retrieval-augmented-generation)
+- RAG improves an LLM's answers by letting it consult an authoritative knowledge source outside its training data before it responds, without retraining the model.
+- Problems with plain LLMs: they can state false information confidently; training data has a cutoff date so answers can be outdated; they may draw on non-authoritative sources.
+- Benefits: cheaper than retraining a model on domain data; keeps answers current; can attribute answers to source documents; developers can control and fix the information sources.
+- How it works: (1) external data is converted to numbers (embeddings) by an embedding model; (2) the embeddings are stored in a vector database; (3) the user's question is converted the same way and matched against stored data to retrieve relevant items; (4) the retrieved text is added to the prompt as context; (5) the LLM answers using the question plus that context; (6) the external data must be refreshed to stay current.

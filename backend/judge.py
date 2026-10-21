@@ -1,7 +1,7 @@
 import hashlib, json, re
 from pydantic import BaseModel
 import config, llm, memory
-from rubric import BY_ID, JUDGED
+from rubric import BY_ID, JUDGED, conditions
 
 
 class Item(BaseModel):
@@ -32,14 +32,21 @@ def parse(raw: str) -> list[Item]:
     return items
 
 
-def build_prompt(lesson: str) -> str:
-    checks = "\n".join(f"{i}. {BY_ID[i]['name']}: {BY_ID[i]['condition']}" for i in JUDGED)
+def build_prompt(lesson: str, profile: dict) -> str:
+    cond = conditions(profile)
+    checks = "\n".join(f"{i}. {BY_ID[i]['tech']}: {cond[i]}" for i in JUDGED)
+    if profile["grounded"]:
+        authority = "Use the SOURCES as the only authority for facts. Do not use your own memory to excuse a claim the sources do not support."
+        sources = f"\nSOURCES:\n{profile['sources']}\n"
+    else:
+        authority = "No source pack exists for this topic. Judge facts against standard, widely accepted knowledge, and fail anything invented or doubtful."
+        sources = ""
     tpl = (config.ROOT / "prompts" / "judge.txt").read_text()
-    return tpl.format(checks=checks, ids=", ".join(JUDGED), sources=config.SOURCES, lesson=lesson)
+    return tpl.format(topic=profile["topic"], authority=authority, checks=checks, ids=", ".join(JUDGED), sources=sources, lesson=lesson)
 
 
-def judge(lesson: str) -> tuple[list[dict], str]:
-    prompt = build_prompt(lesson)
+def judge(lesson: str, profile: dict) -> tuple[list[dict], str]:
+    prompt = build_prompt(lesson, profile)
     key = hashlib.sha256(prompt.encode()).hexdigest()
     cached = memory.cache_get(key)
     if cached:
@@ -56,7 +63,7 @@ def judge(lesson: str) -> tuple[list[dict], str]:
             ok, reason = it.pass_, it.reason
             if ok and not evidence_ok(it.evidence, lesson):
                 ok, reason = False, "Judge gave no verifiable quote from the lesson as evidence for a pass."
-            out.append({"id": it.id, "name": BY_ID[it.id]["name"], "kind": "judge", "passed": ok, "reason": reason, "evidence": it.evidence})
+            out.append({"id": it.id, "name": BY_ID[it.id]["name"], "tech": BY_ID[it.id]["tech"], "kind": "judge", "passed": ok, "reason": reason, "evidence": it.evidence})
         memory.cache_put(key, {"results": out, "model": model})
         return out, model
-    raise RuntimeError(f"all judge models failed: {last}")
+    raise RuntimeError(f"All judge models failed. Last error: {last}")

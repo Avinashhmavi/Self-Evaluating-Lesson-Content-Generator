@@ -1,0 +1,10 @@
+{
+  "match": "\\brag\\b|retrieval[- ]augmented",
+  "key_points": [
+    "retrieve, then add to the prompt, then generate",
+    "the problem of made-up answers (hallucination)",
+    "the problem of out-of-date knowledge (training cutoff)",
+    "embeddings and a vector store, at an intro level"
+  ],
+  "terms": ["LLM", "hallucination", "embedding", "vector", "vector database", "knowledge base", "retrieval", "prompt", "context"]
+}

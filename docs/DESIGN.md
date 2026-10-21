@@ -18,7 +18,11 @@ A loop that decides on its own whether generated content is good enough to ship,
 
 ## Rubric
 C1 grade 8 or lower, C2 no sentence over 25 words, C3 five required sections, C4 600 to 1000 words (code).
-J1 accurate and not overclaimed, J2 grounded in sources, J3 jargon defined, J4 teaches by example, J5 covers key points, J6 coherent flow, J7 simple vocabulary (judge).
+J8 stays on topic, J1 accurate and not overclaimed, J2 grounded, J3 jargon defined, J4 teaches by example, J5 covers key points, J6 coherent flow, J7 simple vocabulary (judge).
+Judge conditions are templates filled per topic (terms, key points, grounding rule).
+
+## Topics
+`plan_topic` picks a profile from `backend/topics/` by regex (RAG: 3 sources, curated key points and terms). Any other topic is planned by the writer model (key points and terms, cached in SQLite) and marked ungrounded, so J1/J2 judge against general knowledge. This was added after a user ran "Introduction to MCP" and got a RAG lesson that still PASSED: the writer prompt carried the RAG source pack, and no check asked whether the lesson matched the requested topic. J8 closes that gap.
 Full pass conditions are in `backend/rubric.py`.
 
 ## Regeneration
@@ -29,7 +33,7 @@ The writer sees the failed checks with reasons and the exact offending text, plu
 2. Pitfalls seen at least once (`PITFALL_MIN=1`, low on purpose so it shows within a few runs) are injected into the writer prompt.
 3. With 3 or more runs and a check that has failed twice, the system drafts one rule. It stays `pending` until a human approves it in the UI. Approved rules join the writer prompt.
 
-## Iteration log (live runs, 7 total)
+## Iteration log (live runs)
 | Run | Result | What it taught |
 |---|---|---|
 | 1 | FAILED_QA | Several `:free` OpenRouter model slugs from articles were dead. I queried the live model list and probed each. |
@@ -39,10 +43,15 @@ The writer sees the failed checks with reasons and the exact offending text, plu
 | 5 | FAILED_QA | The writer kept missing 600 words. The check now says how many words to add. |
 | 6 | FAILED_QA | The writer kept one 27-word sentence for two retries. The check now names every offending sentence and says to split it. |
 | 7 | PASSED on attempt 1 | Memory pitfalls were in the prompt. See the caveat below. |
+| 8 | PASSED on attempt 3 | Overclaim ("fixes hallucination") caught and fixed. |
+| 9 | PASSED, but wrong | Topic "Introduction to MCP" produced a RAG lesson. Led to topic profiles and J8. |
+| 10 | PASSED on attempt 1 | "What is MCP" after the fix: lesson mentions MCP 17 times, RAG 0 times. |
 
 Caveat: the rubric and prompts changed between runs, so run 7 passing first time is not a controlled measurement of learning. A fair test needs a frozen rubric and many runs.
 
 ## What is not proven
+- Planned topics are only as good as the writer model's own knowledge; there is no source pack for them.
+- Run 10's MCP lesson passed although it says an AI model "thinks and talks like a human", a loose claim the judge accepted.
 - Judge reliability. Another free model gave a different verdict on one lesson (J1 failed on minimax, passed on nemotron). There is no human-labelled calibration set.
 - Whether memory improves first-attempt pass rate. One pass in seven runs, confounded as above.
 - The analogy quality of the Example section. The judge checks that each step has a matching action, not that the analogy is sound. Run 7's "typed files = embeddings" is loose.

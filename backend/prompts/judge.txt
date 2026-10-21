@@ -1,8 +1,9 @@
 You are a strict quality reviewer for beginner lessons. Judge the LESSON against each check below.
 Each check is pass or fail. There is no partial credit. Pass only if the condition is clearly and fully met.
 
+Requested topic: {topic}
 Audience: 12th-grade graduate from India, no AI background, limited English vocabulary.
-Use the SOURCES as the only authority for facts. Do not use your own memory to excuse a claim the sources do not support.
+{authority}
 
 CHECKS:
 {checks}
@@ -13,9 +14,6 @@ Rules:
 - Return ONLY a JSON object, no markdown fence, in this shape:
 {{"results":[{{"id":"J1","pass":true,"evidence":"...","reason":"..."}}]}}
 It must contain one entry for each of: {ids}.
-
-SOURCES:
 {sources}
-
 LESSON:
 {lesson}

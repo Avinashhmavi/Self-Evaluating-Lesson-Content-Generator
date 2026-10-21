@@ -17,7 +17,7 @@ def sentences(md: str) -> list[str]:
 
 
 def _r(cid, ok, reason, evidence=""):
-    return {"id": cid, "name": BY_ID[cid]["name"], "kind": "code", "passed": bool(ok), "reason": reason, "evidence": evidence}
+    return {"id": cid, "name": BY_ID[cid]["name"], "tech": BY_ID[cid]["tech"], "kind": "code", "passed": bool(ok), "reason": reason, "evidence": evidence}
 
 
 def code_checks(lesson: str) -> list[dict]:

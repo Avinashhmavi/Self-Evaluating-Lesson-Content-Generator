@@ -24,6 +24,9 @@ def generate(prompt: str) -> str:
 
 
 def judge_raw(prompt: str, model: str) -> str:
+    if model.startswith("google:"):
+        g = ChatGoogleGenerativeAI(model=model.split(":", 1)[1], timeout=120, google_api_key=os.getenv("GOOGLE_API_KEY"))
+        return _text(_retry(lambda: g.invoke(prompt), tries=2))
     llm = ChatOpenAI(model=model, temperature=0, base_url="https://openrouter.ai/api/v1",
                      api_key=os.getenv("OPENROUTER_API_KEY"), timeout=120,
                      extra_body={"reasoning": {"effort": "low"}})

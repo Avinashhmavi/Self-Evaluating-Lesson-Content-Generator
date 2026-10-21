@@ -7,3 +7,5 @@ __pycache__/
 backend/data/*.db
 .unlazy/
 .history/
+demo/*.mp4
+!demo/lesson-gate-demo-voiceover.mp4

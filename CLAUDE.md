@@ -6,6 +6,7 @@ Take-home for a GenAI Engineer (Content Systems) role. An agent writes a beginne
 - Built and run live (Gemini writer, OpenRouter free judge): LangGraph loop, 11 checks, SQLite memory, FastAPI SSE, React UI redesigned for non-technical users (Write, History, Learning, Rules; white, Geist). Offline tests pass (mocked LLMs). 7 live runs so far: 2 PASSED, 5 FAILED_QA (see docs/DESIGN.md iteration log).
 - Any topic works: RAG uses `backend/topics/rag` sources; other topics are auto-planned and ungrounded. 12 checks (J8 on topic added after an off-topic lesson passed).
 - Run 9 in the DB is an MCP-titled lesson that is actually about RAG (pre-fix). Pending proposals 3 to 5 mention RAG and would hurt other topics if approved.
+- Submitted lesson is run 14 (`docs/lesson_rag.md` / `.docx`). Demo video: `demo/lesson-gate-demo-voiceover.mp4` (committed; the silent cut is git-ignored). README has placeholders for the Google Doc and Loom links.
 - Known limits: OpenRouter free tier is 50 requests/day and the judge takes 1 to 4 minutes per call. Judge has no human-labelled calibration set. Learning effect is unproven (rubric changed between runs). Light-mode only, phone width unchecked.
 
 ## Do not touch without asking

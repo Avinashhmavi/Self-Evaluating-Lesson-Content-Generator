@@ -46,6 +46,9 @@ The writer sees the failed checks with reasons and the exact offending text, plu
 | 8 | PASSED on attempt 3 | Overclaim ("fixes hallucination") caught and fixed. |
 | 9 | PASSED, but wrong | Topic "Introduction to MCP" produced a RAG lesson. Led to topic profiles and J8. |
 | 10 | PASSED on attempt 1 | "What is MCP" after the fix: lesson mentions MCP 17 times, RAG 0 times. |
+| 11 | PASSED on attempt 3 | Planted error on the new code: draft 1 failed C2, J1, J2, J7; draft 3 passed 12/12. |
+| 13 | FAILED_QA (best 11/12) | "Introduction to Large Language Models" with a planted error: false fact fixed, one long sentence survived all 3 drafts. Shipped flagged, not hidden. |
+| 14 | PASSED on attempt 3 | The final submitted lesson. Draft 1 7/12 (planted error caught), draft 2 11/12, draft 3 12/12. |
 
 Caveat: the rubric and prompts changed between runs, so run 7 passing first time is not a controlled measurement of learning. A fair test needs a frozen rubric and many runs.
 

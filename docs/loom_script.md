@@ -1,35 +1,33 @@
 # Loom script (target 16 to 18 minutes, face visible)
 
-Setup before recording: backend and frontend running, one clean topic in the box, `docs/DESIGN.md` and `backend/graph.py` open in tabs. A full live run takes 4 to 8 minutes, so start it early in section 3 and talk while it runs.
+Before recording: start the backend and frontend (see README), open http://localhost:5173, and have `backend/graph.py`, `backend/rubric.py` and `docs/DESIGN.md` open in your editor. A live run takes 3 to 8 minutes, so start it in section 3 and keep talking while it runs.
 
-## 1. Intro and the brief (0:00 to 1:30)
-- Say who you are, what the brief asks: generate, evaluate against hard pass/fail checks, regenerate, with a hard cap, plus memory and self-evolution.
-- One line on the key idea: the loop decides if content ships, a human sees it afterwards.
+## 1. Intro (0:00 to 1:30)
+- Who you are. The brief: generate, evaluate against hard pass/fail checks, regenerate with a cap, plus memory and self-evolution.
+- The one idea: the system decides whether a lesson is good enough to ship before a human sees it.
+- Optional: play 30 seconds of `demo/lesson-gate-demo-voiceover.mp4` as a teaser.
 
 ## 2. Architecture walkthrough (1:30 to 6:00)
-- Show the graph picture in the README. Walk each node: load_memory, generate, code_checks, llm_judge, decide, finalize, reflect.
-- `rubric.py`: one source of truth for 11 checks. Explain 4 code checks (free, exact) versus 7 judge checks (meaning).
-- Why a different model family judges (Gemini writes, OpenRouter model judges). Why the judge must quote evidence.
-- Why one judge call per attempt (50 requests/day free tier).
-- Termination: 3 attempts, ship best as `FAILED_QA`, never hide a failure.
+- Show the mermaid diagram in the README. Walk the nodes: load_memory, plan_topic, generate, code_checks, llm_judge, decide, finalize, reflect.
+- `rubric.py`: 12 checks, one source of truth. Why 4 are code (countable, exact) and 8 are judged (meaning).
+- `judge.py`: a different model family judges; it must quote the lesson or the pass is flipped; one JSON call per draft; cache; fallback chain.
+- `graph.py`: the retry prompt (failed checks, problem text, earlier fixes), rewriting from the best draft, the 3-draft cap, `FAILED_QA` instead of hiding failures.
 
-## 3. End-to-end live run (6:00 to 11:00)
-- Topic: Introduction to RAG, error box unticked. Click Generate Lesson.
-- Narrate the pipeline strip and the attempt tabs as checks come in. Point at a failing check and its reason.
-- Show the rejection log: what failed, why, what the writer changed.
-- Show the final lesson and the PASSED or FAILED_QA badge.
+## 3. End to end, with a deliberate error (6:00 to 12:00)
+- On the Write page pick "Introduction to RAG", switch on **Test the checker**, click **Write and check lesson**.
+- Explain the plain-language step list while it runs.
+- When draft 1 is reviewed: point at the failed checks (false fact about retraining weights, the 42-word sentence, the idiom) and read one reason aloud.
+- Watch the rewrite and the next review. Explain "earlier fixes" and "best draft so far".
+- On the result: verdict, "How it got here", compare draft 1 with the final draft, download Word.
+- If the run is slow, open run 14 from History: it is the same flow, already finished.
 
-## 4. Evaluator catches a deliberate error (11:00 to 14:00)
-- Tick "Inject a deliberate error in attempt 1" and run again, or open stored run 3 under Past Runs if time is short.
-- Point out: the planted sentence "RAG retrains the model's weights" is flagged by J1 and J2, the 42-word sentence by C2, the idiom by J7.
-- Show the retry removing them. Say plainly that the judge is a free model and can be wrong.
+## 4. Any topic, memory and self-evolution (12:00 to 15:30)
+- History: open the MCP lesson. Tell the story of the bug (an MCP request produced a RAG lesson that passed) and the fix (topic planning plus the J8 "Stays on topic" check).
+- Learning: first-draft pass rate, the reminders fed to the writer, approve or reject a suggested rule. Say plainly that the rubric changed during development, so the rate is a rough signal.
+- Rules: the 12 checks in plain words.
 
-## 5. Memory and self-evolution (14:00 to 16:00)
-- Memory panel: first-attempt pass rate bars, pitfalls fed to the writer, proposed rule changes. Approve one rule.
-- Be honest: the rubric changed during development, so the improvement is suggestive, not a controlled result.
-
-## 6. What I would do next (16:00 to 17:30)
-- A human-labelled calibration set to measure judge accuracy. Frozen rubric and 20+ runs to measure learning.
-- Paid judge for speed and a second judge for majority vote.
-- More sources in the grounding pack.
-- Close with the three limits from the README.
+## 5. Trade-offs and next steps (15:30 to 17:30)
+- Free models: slow and rate limited, so one judge call per draft and caching.
+- The judge can be wrong: next step is a human-labelled calibration set and a second judge.
+- Only RAG is grounded in sources; other topics rely on model knowledge and the UI says so.
+- Close on the final lesson in the Google Doc.

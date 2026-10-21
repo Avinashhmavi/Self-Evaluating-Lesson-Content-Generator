@@ -2,50 +2,60 @@
 
 ## What it is
 
-RAG stands for Retrieval-Augmented Generation. It is a method that improves answers from an AI model. An AI model is a computer program that processes human language. We call it an LLM, which means a large language model. 
+Retrieval-Augmented Generation is a method that improves AI answers. It connects an AI model to outside information sources. We call this method RAG for short. 
 
-A plain LLM uses only its built-in training memory to answer questions. RAG connects an LLM to an external knowledge source outside its training data. This external source is called a knowledge base. A knowledge base is a collection of documents or files. 
+A plain AI model stores facts inside its own memory from its training. But this memory has limits. It cannot always access or change those facts easily. RAG fixes this limit. It lets the AI search an external knowledge source before it answers a question. 
 
-RAG has two main parts. The first part is retrieval. This means searching the knowledge base to find text that matches a user question. The second part is generation. This means the LLM writes an answer using the retrieved text.
+RAG combines two types of memory. The first type is the internal memory of the AI model. The second type is an external knowledge base. A knowledge base is a large collection of outside documents or files. 
+
+RAG does not retrain the model. Training a model again is very slow and costly. RAG queries outside data at run time instead. Run time is the moment when the user asks a question and the system runs the program to answer it.
 
 ## Why it matters
 
-Plain LLMs have three big problems. First, their training data stops at a specific point in time. This means their answers can be old or out of date. Second, they can state false information with great confidence. When an AI model presents invented information as fact, we call this hallucination. 
+Plain AI models have big problems when they answer questions. First, they can state false information with high confidence. When an AI presents invented information as a true fact, we call this a hallucination. 
 
-Third, retraining an LLM on new data is very expensive and hard to do. RAG solves these problems without retraining the model. RAG lowers the risk of hallucination by grounding answers in real documents. Grounding means basing the output on trusted facts. 
+Second, the training data of an AI has a cutoff date. A cutoff date is the final day of data used to train the model. The model knows nothing about events that happen after that date. Its answers can become outdated. 
 
-RAG also keeps answers current because developers can update the external data at any time. It can attribute answers to source documents. Attribution means showing the original source of the facts. This helps users check if the answers are true.
+Third, plain models can draw on bad sources. RAG solves these problems in many ways. It grounds answers in authoritative sources. This lowers the risk of hallucinations. 
+
+RAG keeps answers current because developers can update the external data. It is much cheaper than retraining a model on new domain data. Also, RAG can attribute answers to source documents. This means the AI can show the source of its answers. Users can check those sources to verify the facts.
 
 ## How it works
 
-RAG works in six clear steps. First, external data is converted into numbers called embeddings. An embedding is a numeric format of text that a computer can read. These numbers are called vectors. A vector is a list of numbers that represents the meaning of text. 
+RAG works in a series of steps without retraining the model. 
 
-Second, the system stores these vectors in a vector database. A vector database is a special database made to store and search vectors quickly. Third, when a user asks a question, the system converts that question into a vector too. It searches the vector database to find relevant items. This search step is called retrieval. 
+First, external data is converted into numbers. We call these numerical forms embeddings. An embedding is a text converted into a list of numbers so a computer can understand its meaning. These embeddings are stored in a vector database. A vector database is a special database designed to store and search through those number lists quickly. In this database, a vector is just another word for that list of numbers. 
 
-Fourth, the system adds the retrieved text to the prompt as context. A prompt is the text instruction given to an AI model. Context is the extra background information supplied with the prompt to help the model answer well. 
+Second, the user submits a prompt. A prompt is the text or question that a user types into the AI system. 
 
-Fifth, the LLM reads the question plus that context to write its final response. Sixth, the external data must be refreshed often to stay current. RAG does not make a model error-proof, but it helps the model give more factual text.
+Third, a retriever searches the knowledge base. A retriever is a tool that finds relevant passages in the knowledge base. This action of finding and getting relevant passages from the knowledge base is the retrieval step. 
+
+Fourth, the system takes the retrieved text and adds it to the prompt as context. Context is the extra background text given to the AI to help it form a good answer. 
+
+Fifth, the language model generates the response. A language model, or LLM, is an AI program that reads and writes human text. The LLM reads the user question plus the new context, and then it writes the final answer.
 
 ## Example
 
-Imagine you are an Indian student preparing for an exam. You have a big stack of study notes on your desk. This stack of notes is your knowledge base. 
+Think about an Indian student studying in a city library for a college exam. 
 
-First, you convert your handwritten notes into typed digital files. This is like turning documents into embeddings and vectors. 
+First, the student has a massive textbook stored on a shelf. This shelf acts like your vector database, holding all the pages of text as structured notes. 
 
-Second, you store these typed files inside a folder on your computer. This folder is your vector database. 
+Second, the student gets a difficult question on a practice sheet. This question is your prompt. 
 
-Third, you read a difficult question from the exam paper. You look through your folder to find the exact page that talks about this question. Finding that page is the retrieval step. 
+Third, the student goes to the shelf and looks up the exact topic in the textbook index. This action of finding and getting the correct page is the retrieval step. 
 
-Fourth, you place that open page right next to the question on your desk. The words on that open page act as your context. 
+Fourth, the student opens the book to that specific page and keeps it open next to the question paper. This open page acts as the context. 
 
-Fifth, you read the question and the open page together. Then you write down the correct answer on your exam sheet. Writing this answer is the generation step. 
+Fifth, the student reads the question and the open textbook page together. Then the student writes down the correct, factual answer on the paper. This final writing step is how the language model generates the response using the extra context. 
 
-Sixth, if your teacher gives you new notes next week, you must add them to your folder so your information stays up to date.
+Sixth, if the textbook page has old data, the student must replace that page with a new printed update to stay current. This matches the rule that external data must be refreshed to stay current.
 
 ## Recap
 
-RAG is a method that connects an LLM to external information sources. Plain LLMs can suffer from hallucination, which is making up false facts. They also have outdated knowledge because their training data stops at a cutoff date. 
+RAG is a system that connects an AI model to external knowledge sources. It improves the answers of the AI without retraining the model. 
 
-RAG solves these problems using a knowledge base and a retriever. First, documents are turned into embeddings and vectors. Second, they are stored in a vector database. Third, the system searches this database to find relevant text for a user query. 
+Plain models suffer from hallucinations where they state false facts. They also have a training cutoff date that makes their knowledge out of date. 
 
-Fourth, the system adds this text as context to the prompt. Fifth, the LLM generates a response using the question and the context. RAG helps lower the risk of hallucination and keeps answers factual without the high cost of retraining the model.
+RAG fixes this by using a retriever to search a vector database. It converts documents into embeddings. 
+
+Then it adds the retrieved text to the prompt as context before the generator creates the final answer. This method lowers errors, keeps data current, and lets users check source documents.
